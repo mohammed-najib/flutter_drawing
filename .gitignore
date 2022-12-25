@@ -42,3 +42,10 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+node_modules
+package.json
+yarn.lock
+.firebaserc
+firebase.json
+.firebase

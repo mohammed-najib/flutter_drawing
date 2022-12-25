@@ -46,12 +46,15 @@ class _DrawingPageState extends State<DrawingPage> {
       //
       if (kIsWeb) {
         final base64 = base64Encode(pngBytes);
-        html.AnchorElement(
+        final anchor = html.AnchorElement(
           href: 'data:application/octet-stream;base64,$base64',
-        )
-          ..target = 'blank'
-          ..setAttribute('download', fileName)
-          ..click();
+        )..target = 'blank';
+        anchor.download = fileName;
+        html.document.body?.append(anchor);
+        anchor.click();
+        anchor.remove();
+        // ..setAttribute('download', fileName)
+        // ..click();
         // AnchorElement anchorElement = AnchorElement(href: )
       } else {
         final directoryPath = (await getApplicationDocumentsDirectory()).path;
