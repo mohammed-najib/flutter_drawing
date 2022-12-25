@@ -42,17 +42,7 @@ class _DrawingPageState extends State<DrawingPage> {
 
       final fileName = '${DateTime.now().microsecondsSinceEpoch}.png';
 
-      // final saved = await Image
-
-      //
       if (kIsWeb) {
-        //
-        // FlutterFileSaver().writeFileAsBytes(
-        //   fileName: fileName,
-        //   bytes: pngBytes,
-        // );
-        //
-        //
         final base64 = base64Encode(pngBytes);
         final anchor = html.AnchorElement(
           // href: 'data:application/octet-stream;base64,$base64',
@@ -62,21 +52,11 @@ class _DrawingPageState extends State<DrawingPage> {
         html.document.body?.append(anchor);
         anchor.click();
         anchor.remove();
-        // ..setAttribute('download', fileName)
-        // ..click();
-        // AnchorElement anchorElement = AnchorElement(href: )
-        //
       } else {
         final directoryPath = (await getApplicationDocumentsDirectory()).path;
         final imagePath = await File('$directoryPath/$fileName').create();
-        //
-        // print('imagePath is: $imagePath');
-        //
         await imagePath.writeAsBytes(pngBytes);
       }
-
-      // Image.end
-      //
     } catch (e) {
       print(e);
     }
@@ -90,16 +70,8 @@ class _DrawingPageState extends State<DrawingPage> {
   }
 
   void onPanStart(DragStartDetails details) {
-    // print('User started drawing');
-
     final box = context.findRenderObject() as RenderBox;
     final point = box.globalToLocal(details.globalPosition);
-
-    // print(point);
-
-    // setState(() {
-    //   line = DrawnLine([point], selectedColor, selectedWidth);
-    // });
 
     line = DrawnLine([point], selectedColor, selectedWidth);
     currentLineStreamController.add(line);
@@ -108,28 +80,6 @@ class _DrawingPageState extends State<DrawingPage> {
   void onPanUpdate(DragUpdateDetails details) {
     final box = context.findRenderObject() as RenderBox;
     final point = box.globalToLocal(details.globalPosition);
-    // if (line != null) {
-    //   final List<Offset?> path = List.from(line!.path)..add(point);
-    //   line = DrawnLine(path, selectedColor, selectedWidth);
-
-    //   setState(() {
-    //     if (lines.isEmpty) {
-    //       lines.add(line!);
-    //     } else {
-    //       lines[lines.length - 1] = line;
-    //     }
-    //   });
-    // }
-
-    // print(point);
-
-    // final linePath = line?.path;
-    // if (linePath != null) {
-    //   final List<Offset?> path = List.from(linePath)..add(point);
-    //   setState(() {
-    //     line = DrawnLine(path, selectedColor, selectedWidth);
-    //   });
-    // }
 
     final linePath = line?.path;
     if (linePath != null) {
@@ -142,10 +92,6 @@ class _DrawingPageState extends State<DrawingPage> {
   void onPanEnd(DragEndDetails details) {
     lines = List.from(lines)..add(line);
     linesStreamController.add(lines);
-
-    // setState(() {
-    //   lines.add(line);
-    // });
   }
 
   Widget buildCurrentPath(BuildContext context) {
@@ -166,10 +112,6 @@ class _DrawingPageState extends State<DrawingPage> {
               ),
             ),
           ),
-          // child: CustomPaint(
-          //   // painter: Sketcher(lines: [line]),
-          //   painter: Sketcher(lines: lines),
-          // ),
         ),
       ),
     );
