@@ -1,17 +1,13 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:html' as html;
-import 'dart:io';
-import 'dart:ui' as ui;
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_drawing/drawn_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-// import 'package:flutter_file_saver/flutter_file_saver.dart';
-import 'package:path_provider/path_provider.dart';
 
 import 'sketcher.dart';
+import 'widgets/clear_button.widget.dart';
+import 'widgets/save_button.widget.dart';
+import 'widgets/stroke_button.widget.dart';
 
 class DrawingPage extends StatefulWidget {
   const DrawingPage({super.key});
@@ -31,36 +27,6 @@ class _DrawingPageState extends State<DrawingPage> {
       StreamController<List<DrawnLine?>>.broadcast();
   final StreamController<DrawnLine?> currentLineStreamController =
       StreamController<DrawnLine?>.broadcast();
-
-  Future<void> save() async {
-    try {
-      final boundary = _globalKey.currentContext?.findRenderObject()
-          as RenderRepaintBoundary;
-      final image = await boundary.toImage();
-      final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
-      final pngBytes = byteData!.buffer.asUint8List();
-
-      final fileName = '${DateTime.now().microsecondsSinceEpoch}.png';
-
-      if (kIsWeb) {
-        final base64 = base64Encode(pngBytes);
-        final anchor = html.AnchorElement(
-          // href: 'data:application/octet-stream;base64,$base64',
-          href: 'data:image/png;base64,$base64',
-        )..target = 'blank';
-        anchor.download = fileName;
-        html.document.body?.append(anchor);
-        anchor.click();
-        anchor.remove();
-      } else {
-        final directoryPath = (await getApplicationDocumentsDirectory()).path;
-        final imagePath = await File('$directoryPath/$fileName').create();
-        await imagePath.writeAsBytes(pngBytes);
-      }
-    } catch (e) {
-      print(e);
-    }
-  }
 
   Future<void> clear() async {
     setState(() {
@@ -143,27 +109,28 @@ class _DrawingPageState extends State<DrawingPage> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          buildStrokeButton(5.0),
-          buildStrokeButton(10.0),
-          buildStrokeButton(15.0),
+          StrokeButton(
+            strokeButtonClicked: () {
+              selectedWidth = 5.0;
+            },
+            strokeWidth: 5.0,
+            selectedColor: selectedColor,
+          ),
+          StrokeButton(
+            strokeButtonClicked: () {
+              selectedWidth = 10.0;
+            },
+            strokeWidth: 10.0,
+            selectedColor: selectedColor,
+          ),
+          StrokeButton(
+            strokeButtonClicked: () {
+              selectedWidth = 15.0;
+            },
+            strokeWidth: 15.0,
+            selectedColor: selectedColor,
+          ),
         ],
-      ),
-    );
-  }
-
-  Widget buildStrokeButton(double strokeWidth) {
-    return GestureDetector(
-      onTap: () {
-        selectedWidth = strokeWidth;
-      },
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Container(
-          width: strokeWidth * 2,
-          height: strokeWidth * 2,
-          decoration: BoxDecoration(
-              color: selectedColor, borderRadius: BorderRadius.circular(20.0)),
-        ),
       ),
     );
   }
@@ -176,9 +143,11 @@ class _DrawingPageState extends State<DrawingPage> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          buildClearButton(),
+          ClearButton(clear: clear),
           const Divider(height: 10.0),
-          buildSaveButton(),
+          SaveButton(
+              boundary: _globalKey.currentContext?.findRenderObject()
+                  as RenderRepaintBoundary?),
           const Divider(height: 10.0),
           buildColorButton(Colors.red),
           buildColorButton(Colors.blueAccent),
@@ -204,19 +173,6 @@ class _DrawingPageState extends State<DrawingPage> {
             selectedColor = color;
           });
         },
-      ),
-    );
-  }
-
-  Widget buildSaveButton() {
-    return GestureDetector(
-      onTap: save,
-      child: const CircleAvatar(
-        child: Icon(
-          Icons.save,
-          size: 20.0,
-          color: Colors.white,
-        ),
       ),
     );
   }
