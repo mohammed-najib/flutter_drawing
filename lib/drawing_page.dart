@@ -1,9 +1,9 @@
 import 'dart:async';
 
-import 'package:flutter_drawing/drawn_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
+import 'drawn_line.dart';
 import 'sketcher.dart';
 import 'widgets/clear_button.widget.dart';
 import 'widgets/save_button.widget.dart';
