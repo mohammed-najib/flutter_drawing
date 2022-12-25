@@ -8,6 +8,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_drawing/drawn_line.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+// import 'package:flutter_file_saver/flutter_file_saver.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'sketcher.dart';
@@ -45,9 +46,17 @@ class _DrawingPageState extends State<DrawingPage> {
 
       //
       if (kIsWeb) {
+        //
+        // FlutterFileSaver().writeFileAsBytes(
+        //   fileName: fileName,
+        //   bytes: pngBytes,
+        // );
+        //
+        //
         final base64 = base64Encode(pngBytes);
         final anchor = html.AnchorElement(
-          href: 'data:application/octet-stream;base64,$base64',
+          // href: 'data:application/octet-stream;base64,$base64',
+          href: 'data:image/png;base64,$base64',
         )..target = 'blank';
         anchor.download = fileName;
         html.document.body?.append(anchor);
@@ -56,11 +65,12 @@ class _DrawingPageState extends State<DrawingPage> {
         // ..setAttribute('download', fileName)
         // ..click();
         // AnchorElement anchorElement = AnchorElement(href: )
+        //
       } else {
         final directoryPath = (await getApplicationDocumentsDirectory()).path;
         final imagePath = await File('$directoryPath/$fileName').create();
         //
-        print('imagePath is: $imagePath');
+        // print('imagePath is: $imagePath');
         //
         await imagePath.writeAsBytes(pngBytes);
       }
