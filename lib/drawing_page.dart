@@ -101,62 +101,71 @@ class _DrawingPageState extends State<DrawingPage> {
     );
   }
 
-  Widget buildStrokeToolbar() {
-    return Positioned(
-      bottom: 100.0,
-      right: 10.0,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          StrokeButton(
-            strokeButtonClicked: () {
-              selectedWidth = 5.0;
-            },
-            strokeWidth: 5.0,
-            selectedColor: selectedColor,
-          ),
-          StrokeButton(
-            strokeButtonClicked: () {
-              selectedWidth = 10.0;
-            },
-            strokeWidth: 10.0,
-            selectedColor: selectedColor,
-          ),
-          StrokeButton(
-            strokeButtonClicked: () {
-              selectedWidth = 15.0;
-            },
-            strokeWidth: 15.0,
-            selectedColor: selectedColor,
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget buildColorToolbar() {
     return Positioned(
-      top: 40.0,
+      top: MediaQuery.of(context).viewPadding.top,
       right: 10.0,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          ClearButton(clear: clear),
-          const Divider(height: 10.0),
-          SaveButton(
-              boundary: _globalKey.currentContext?.findRenderObject()
-                  as RenderRepaintBoundary?),
-          const Divider(height: 10.0),
-          buildColorButton(Colors.red),
-          buildColorButton(Colors.blueAccent),
-          buildColorButton(Colors.deepOrange),
-          buildColorButton(Colors.green),
-          buildColorButton(Colors.lightBlue),
-          buildColorButton(Colors.black),
-          buildColorButton(Colors.white),
-        ],
+      child: SizedBox(
+        height: MediaQuery.of(context).size.height -
+            MediaQuery.of(context).viewPadding.vertical,
+        width: 58.0,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Expanded(
+              child: SizedBox(
+                width: 58.0,
+                child: ListView(
+                  children: [
+                    ClearButton(clear: clear),
+                    const Divider(height: 10.0),
+                    SaveButton(
+                        boundary: _globalKey.currentContext?.findRenderObject()
+                            as RenderRepaintBoundary?),
+                    const Divider(height: 10.0),
+                    buildColorButton(Colors.red),
+                    buildColorButton(Colors.blueAccent),
+                    buildColorButton(Colors.deepOrange),
+                    buildColorButton(Colors.green),
+                    buildColorButton(Colors.lightBlue),
+                    buildColorButton(Colors.black),
+                    buildColorButton(Colors.white),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 20.0),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                StrokeButton(
+                  strokeButtonClicked: () {
+                    selectedWidth = 5.0;
+                  },
+                  strokeWidth: 5.0,
+                  selectedColor: selectedColor,
+                ),
+                StrokeButton(
+                  strokeButtonClicked: () {
+                    selectedWidth = 10.0;
+                  },
+                  strokeWidth: 10.0,
+                  selectedColor: selectedColor,
+                ),
+                StrokeButton(
+                  strokeButtonClicked: () {
+                    selectedWidth = 15.0;
+                  },
+                  strokeWidth: 15.0,
+                  selectedColor: selectedColor,
+                ),
+              ],
+            ),
+            const SizedBox(height: 20.0),
+          ],
+        ),
       ),
     );
   }
@@ -199,7 +208,6 @@ class _DrawingPageState extends State<DrawingPage> {
           buildAllPaths(context),
           buildCurrentPath(context),
           buildColorToolbar(),
-          buildStrokeToolbar(),
         ],
       ),
     );

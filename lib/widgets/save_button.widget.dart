@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'dart:html' as html;
+import 'package:universal_html/html.dart' as html;
 import 'dart:io' as io;
 import 'dart:ui' as ui;
 
@@ -16,25 +16,9 @@ class SaveButton extends StatelessWidget {
     required this.boundary,
   });
 
-  // var isHovering = false;
-
-  // setIsHoveringTrue(PointerHoverEvent _) {
-  //   setState(() {
-  //     isHovering = true;
-  //   });
-  // }
-
-  // setIsHoveringFalse(PointerExitEvent _) {
-  //   setState(() {
-  //     isHovering = false;
-  //   });
-  // }
-
   Future<void> save() async {
     if (boundary != null) {
       try {
-        // final boundary = _globalKey.currentContext?.findRenderObject()
-        //     as RenderRepaintBoundary;
         final image = await boundary!.toImage();
         final byteData = await image.toByteData(format: ui.ImageByteFormat.png);
         final pngBytes = byteData!.buffer.asUint8List();
@@ -44,7 +28,6 @@ class SaveButton extends StatelessWidget {
         if (kIsWeb) {
           final base64 = base64Encode(pngBytes);
           final anchor = html.AnchorElement(
-            // href: 'data:application/octet-stream;base64,$base64',
             href: 'data:image/png;base64,$base64',
           )..target = 'blank';
           anchor.download = fileName;
@@ -65,8 +48,6 @@ class SaveButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MouseRegion(
-      // onHover: setIsHoveringTrue,
-      // onExit: setIsHoveringFalse,
       cursor: SystemMouseCursors.click,
       child: GestureDetector(
         onTap: save,
