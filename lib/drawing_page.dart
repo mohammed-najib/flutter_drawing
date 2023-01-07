@@ -103,11 +103,12 @@ class _DrawingPageState extends State<DrawingPage> {
 
   Widget buildColorToolbar() {
     return Positioned(
-      top: MediaQuery.of(context).viewPadding.top,
+      top: MediaQuery.of(context).viewPadding.top + 20.0,
       right: 10.0,
       child: SizedBox(
         height: MediaQuery.of(context).size.height -
-            MediaQuery.of(context).viewPadding.vertical,
+            MediaQuery.of(context).viewPadding.vertical -
+            20.0,
         width: 58.0,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
